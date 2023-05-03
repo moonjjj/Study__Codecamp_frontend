@@ -26,57 +26,62 @@ import {
 
 export default function BoardWriteUI() {
   // 데이터 State
-  const [name, setName] = useState(""); // 이름
+  const [writer, setWriter] = useState(""); // 이름
   const [password, setPassword] = useState(""); //비밀번호
-  const [subject, setSubject] = useState(""); // 제목
+  const [title, setTitle] = useState(""); // 제목
   const [contents, setContents] = useState(""); //내용
+  // 에러메세지
+  const [errorWriter, setErrorWriter] = useState(""); // 이름
+  const [errorPassword, setErrorPassword] = useState(""); //비밀번호
+  const [errorTitle, setErrorTitle] = useState(""); // 제목
+  const [errorContents, setErrorContents] = useState(""); //내용
 
   // 데이터 저장
-  function onChangeName(e) {
+  function onChangeWriter(e) {
     // 이름
-    setName(e.target.value);
+    setWriter(e.target.value);
+    if (e.target.value !== "") {
+      setErrorWriter("");
+    }
   }
   function onChangePassword(e) {
     //비밀번호
     setPassword(e.target.value);
+    if (e.target.value !== "") {
+      setErrorPassword("");
+    }
   }
-  function onChangeSubject(e) {
+  function onChangeTitle(e) {
     //제목
-    setSubject(e.target.value);
+    setTitle(e.target.value);
+    if (e.target.value !== "") {
+      setErrorTitle("");
+    }
   }
   function onChangeContents(e) {
     //내용
     setContents(e.target.value);
+    if (e.target.value !== "") {
+      setErrorContents("");
+    }
   }
-
-  // 에러메세지
-  const [errorName, setErrorName] = useState(""); // 이름
-  const [errorPassword, setErrorPassword] = useState(""); //비밀번호
-  const [errorSubject, setErrorSubject] = useState(""); // 제목
-  const [errorContents, setErrorContents] = useState(""); //내용
 
   function onClickSubmit() {
     // 데이터 빈칸 검증
-    if (!name.length) {
-      setErrorName("이름을 입력해주세요.");
-    } else {
-      setErrorName("");
+    if (!writer) {
+      setErrorWriter("이름을 입력해주세요.");
     }
-    if (!password.length) {
+    if (!password) {
       setErrorPassword("비밀번호를 입력해주세요.");
-    } else {
-      setErrorPassword("");
     }
-
-    if (!subject.length) {
-      setErrorSubject("제목을 입력해주세요.");
-    } else {
-      setErrorSubject("");
+    if (!title) {
+      setErrorTitle("제목을 입력해주세요.");
     }
-    if (!contents.length) {
+    if (!contents) {
       setErrorContents("내용을 입력해주세요.");
-    } else {
-      setErrorContents("");
+    }
+    if (writer && password && title && contents) {
+      alert("게시글이 등록되었습니다.");
     }
   }
 
@@ -89,8 +94,8 @@ export default function BoardWriteUI() {
           <Writer
             type="text"
             placeholder="이름을 입력해주세요."
-            onChange={onChangeName}></Writer>
-          <ErrorMessage>{errorName}</ErrorMessage>
+            onChange={onChangeWriter}></Writer>
+          <ErrorMessage>{errorWriter}</ErrorMessage>
         </InputWrapper>
         <InputWrapper>
           <Label>비밀번호</Label>
@@ -106,8 +111,8 @@ export default function BoardWriteUI() {
         <Subject
           type="text"
           placeholder="제목을  작성해주세요.."
-          onChange={onChangeSubject}></Subject>
-        <ErrorMessage>{errorSubject}</ErrorMessage>
+          onChange={onChangeTitle}></Subject>
+        <ErrorMessage>{errorTitle}</ErrorMessage>
       </InputWrapper>
       <InputWrapper>
         <Label>내용</Label>
@@ -138,9 +143,9 @@ export default function BoardWriteUI() {
       </ImageWrapper>
       <OptionWrapper>
         <Label>메인설정</Label>
-        <RadioButton type="radio" id="youtube" name="radio-button" />
+        <RadioButton type="radio" id="youtube" writer="radio-button" />
         <RadioLabel htmlFor="youtube">유튜브</RadioLabel>
-        <RadioButton type="radio" id="image" name="radio-button" />
+        <RadioButton type="radio" id="image" writer="radio-button" />
         <RadioLabel htmlFor="image">사진</RadioLabel>
       </OptionWrapper>
       <ButtonWrapper>
