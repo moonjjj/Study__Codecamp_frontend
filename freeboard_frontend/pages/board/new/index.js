@@ -97,10 +97,12 @@ export default function BoardWriteUI() {
       const result = await createBoard({
         variables: {
           createBoardInput: {
-            writer: writer,
-            password: password,
-            title: title,
-            contents: contents,
+            // shorthand-property
+            // 객체에서 key 와 value 의 이름이 같다면 생략 가능
+            writer,
+            password,
+            title,
+            contents,
           },
         },
       });
