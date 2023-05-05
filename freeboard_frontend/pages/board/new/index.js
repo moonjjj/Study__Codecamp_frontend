@@ -1,3 +1,4 @@
+import { gql, useMutation } from "@apollo/client";
 import { useState } from "react";
 import {
   Address,
@@ -24,12 +25,24 @@ import {
   ErrorMessage,
 } from "../../../styles/emotion";
 
+const CREATE_BOARD = gql`
+  mutation createBoard($createBoardInput: CreateBoardInput!) {
+    createBoard(createBoardInput: $createBoardInput) {
+      _id
+      writer
+      title
+      contents
+    }
+  }
+`;
+
 export default function BoardWriteUI() {
   // 데이터 State
   const [writer, setWriter] = useState(""); // 이름
   const [password, setPassword] = useState(""); //비밀번호
   const [title, setTitle] = useState(""); // 제목
   const [contents, setContents] = useState(""); //내용
+  const [createBoard] = useMutation(CREATE_BOARD); // 게시글 등록 Mutation
   // 에러메세지
   const [errorWriter, setErrorWriter] = useState(""); // 이름
   const [errorPassword, setErrorPassword] = useState(""); //비밀번호
@@ -66,7 +79,7 @@ export default function BoardWriteUI() {
     }
   }
 
-  function onClickSubmit() {
+  const onClickSubmit = async () => {
     // 데이터 빈칸 검증
     if (!writer) {
       setErrorWriter("이름을 입력해주세요.");
@@ -81,9 +94,19 @@ export default function BoardWriteUI() {
       setErrorContents("내용을 입력해주세요.");
     }
     if (writer && password && title && contents) {
-      alert("게시글이 등록되었습니다.");
+      const result = await createBoard({
+        variables: {
+          createBoardInput: {
+            writer: writer,
+            password: password,
+            title: title,
+            contents: contents,
+          },
+        },
+      });
+      console.log(result);
     }
-  }
+  };
 
   return (
     <Wrapper>
