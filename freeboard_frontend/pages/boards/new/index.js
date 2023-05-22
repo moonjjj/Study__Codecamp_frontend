@@ -1,4 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import {
   Address,
@@ -23,7 +24,7 @@ import {
   Zipcode,
   ZipcodeWrapper,
   ErrorMessage,
-} from "../../../styles/emotion";
+} from "../../../styles/boardsNew";
 
 const CREATE_BOARD = gql`
   mutation createBoard($createBoardInput: CreateBoardInput!) {
@@ -37,12 +38,15 @@ const CREATE_BOARD = gql`
 `;
 
 export default function BoardWriteUI() {
+  const router = useRouter();
+
   // 데이터 State
   const [writer, setWriter] = useState(""); // 이름
   const [password, setPassword] = useState(""); //비밀번호
   const [title, setTitle] = useState(""); // 제목
   const [contents, setContents] = useState(""); //내용
   const [createBoard] = useMutation(CREATE_BOARD); // 게시글 등록 Mutation
+
   // 에러메세지
   const [errorWriter, setErrorWriter] = useState(""); // 이름
   const [errorPassword, setErrorPassword] = useState(""); //비밀번호
@@ -93,20 +97,28 @@ export default function BoardWriteUI() {
     if (!contents) {
       setErrorContents("내용을 입력해주세요.");
     }
+
     if (writer && password && title && contents) {
-      const result = await createBoard({
-        variables: {
-          createBoardInput: {
-            // shorthand-property
-            // 객체에서 key 와 value 의 이름이 같다면 생략 가능
-            writer,
-            password,
-            title,
-            contents,
+      try {
+        const result = await createBoard({
+          variables: {
+            createBoardInput: {
+              // shorthand-property
+              // 객체에서 key 와 value 의 이름이 같다면 생략 가능
+              writer,
+              password,
+              title,
+              contents,
+            },
           },
-        },
-      });
-      console.log(result);
+        });
+
+        alert("등록되었습니다.");
+        // 상세페이지로 이동
+        router.push(`/boards/${result.data.createBoard._id}`);
+      } catch (error) {
+        alert(error.message);
+      }
     }
   };
 
