@@ -46,7 +46,7 @@ export default function Board() {
       alert("상품이 등록되었습니다.");
 
       // 상세보기 페이지 이동
-      router.push(`/05/boards/view/${result.data.createProduct._id}`);
+      router.push(`/06/boards/view/${result.data.createProduct._id}`);
     } catch (error) {
       alert(error.message);
     }
