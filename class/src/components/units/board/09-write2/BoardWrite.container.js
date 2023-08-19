@@ -37,13 +37,14 @@ export default function BoardWrite(props) {
 
   //수정하기
   const onClickUpdate = async() =>{
+    const myvariables = {};
+    myvariables.number = Number(router.query.number);
+    if(writer) myvariables.writer = writer;
+    if(title) myvariables.title = title;
+    if(contents) myvariables.contents = contents;
+    
     const result = await updateBoard({
-      variables:{
-        number: Number(router.query.number),
-        writer: writer,
-        title: title,
-        contents: contents
-      }
+      variables: myvariables 
     })
     console.log(result);
 
